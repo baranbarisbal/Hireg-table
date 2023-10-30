@@ -44,6 +44,7 @@ const columns = [
     minWidth: 170,
 
     format: (value) => value.toLocaleString("en-US"),
+    sticky: true,
   },
   {
     id: "density",
@@ -97,32 +98,43 @@ export default function StickyHeadTable() {
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [input, setInput] = useState({});
+  const [input, setInput] = useState({
+    name: "",
+    code: "",
+    population: "",
+    size: "",
+    density: "",
+    density1: "",
+    density2: "",
+    density3: "",
+    density4: "",
+    density5: "",
+  });
   const [rows, setRows] = useState([]);
-  console.log(setInput);
 
-  const handleSave = (e) => {
-    const newRow = { ...input };
+  const handleSave = () => {
+    if (input.name === "") {
+      alert("You cant send empty value");
+    } else {
+      const newRow = { ...input };
 
-    setRows([...rows, newRow]);
+      setRows([...rows, newRow]);
 
-    setInput({
-      name: "",
-      code: "",
-      population: "",
-      size: "",
-      density: "",
-      density1: "",
-      density2: "",
-      density3: "",
-      density4: "",
-      density5: "",
-    });
+      setInput({
+        name: "",
+        code: "",
+        population: "",
+        size: "",
+        density: "",
+        density1: "",
+        density2: "",
+        density3: "",
+        density4: "",
+        density5: "",
+      });
+      console.log(input);
+    }
     setOpenDialog(false);
-    // setInput({
-    //   ...input,
-    //   [e.target.name]: e.target.value,
-    // });
   };
   const handleChange = (e) => {
     setInput({
@@ -149,7 +161,7 @@ export default function StickyHeadTable() {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  console.log(selectedColumns);
+
   useEffect(() => {
     setSelectedColumns([columns[0].id]);
   }, []);
@@ -231,6 +243,7 @@ export default function StickyHeadTable() {
             <TableRow>
               {selectedColumns.map((selectedColumn) => {
                 const column = columns.find((col) => col.id === selectedColumn);
+                console.log(column);
                 if (column) {
                   if (column.id === "name") {
                     return (
@@ -257,8 +270,8 @@ export default function StickyHeadTable() {
                         align={column.align}
                         style={{
                           position: column.sticky ? "sticky" : "initial",
-                          left: column.sticky ? 0 : "auto",
-
+                          left: column.minWidth + 32 + "px",
+                          backgroundColor: "#f5f5f5",
                           zIndex: 50,
                         }}
                       >
@@ -315,7 +328,8 @@ export default function StickyHeadTable() {
                               align={column.align}
                               style={{
                                 position: column.sticky ? "sticky" : "initial",
-                                left: column.sticky ? 0 : "auto",
+                                left: column.minWidth + 32 + "px",
+                                backgroundColor: "#f5f5f5",
                               }}
                             >
                               <Tooltip
