@@ -20,13 +20,16 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
   Popover,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { columnsStateInitializer } from "@mui/x-data-grid/internals";
+import DialogComp from "../components/DialogComp";
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 170 },
+  { id: "name", label: "Name", minWidth: 170, sticky: true },
   { id: "code", label: "ISO\u00a0Code", minWidth: 170 },
   {
     id: "population",
@@ -86,27 +89,6 @@ const columns = [
   },
 ];
 
-// function createData(name, code, population, size) {
-//   const density = population / size;
-//   const density1 = population / size;
-//   const density2 = population / size;
-//   const density3 = population / size;
-//   const density4 = population / size;
-//   const density5 = population / size;
-//   return {
-//     name,
-//     code,
-//     population,
-//     size,
-//     density,
-//     density1,
-//     density2,
-//     density3,
-//     density4,
-//     density5,
-//   };
-// }
-
 export default function StickyHeadTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -117,7 +99,7 @@ export default function StickyHeadTable() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [input, setInput] = useState({});
   const [rows, setRows] = useState([]);
-  console.log(input);
+  console.log(setInput);
 
   const handleSave = (e) => {
     const newRow = { ...input };
@@ -191,171 +173,59 @@ export default function StickyHeadTable() {
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Button
+        sx={{
+          borderRadius: "6px",
+          border: "1px solid rgb(208, 213, 221)",
+          boxShadow: "none",
+          "&:hover": {
+            border: "1px solid #000",
+          },
+        }}
+        aria-describedby={id}
+        onClick={handleClick}
+      >
+        Columns
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        <PopoverComp
+          selectedColumns={selectedColumns}
+          onSelectColumn={handleColumnSelect}
+          onClose={handlePopoverClose}
+          setSelectedColumns={setSelectedColumns}
+        />
+      </Popover>
+      <Button
+        sx={{
+          marginLeft: 2,
+          borderRadius: "6px",
+          border: "1px solid rgb(208, 213, 221)",
+          boxShadow: "none",
+          "&:hover": {
+            border: "1px solid #000",
+          },
+        }}
+        onClick={handleClickDialog}
+      >
+        Add Item
+      </Button>
+      <DialogComp
+        columns={columns}
+        openDialog={openDialog}
+        handleSave={handleSave}
+        handleChange={handleChange}
+        handleCloseDialog={handleCloseDialog}
+      ></DialogComp>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Button
-          sx={{
-            borderRadius: "6px",
-            border: "1px solid rgb(208, 213, 221)",
-            boxShadow: "none",
-            "&:hover": {
-              border: "1px solid #000",
-            },
-          }}
-          aria-describedby={id}
-          onClick={handleClick}
-        >
-          Columns
-        </Button>
-        <Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-        >
-          <PopoverComp
-            selectedColumns={selectedColumns}
-            onSelectColumn={handleColumnSelect}
-            onClose={handlePopoverClose}
-            setSelectedColumns={setSelectedColumns}
-          />
-        </Popover>
-        <Button
-          sx={{
-            marginLeft: 2,
-            borderRadius: "6px",
-            border: "1px solid rgb(208, 213, 221)",
-            boxShadow: "none",
-            "&:hover": {
-              border: "1px solid #000",
-            },
-          }}
-          onClick={handleClickDialog}
-        >
-          Add Item
-        </Button>
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle>Add Item</DialogTitle>
-          <DialogContent>
-            <DialogContentText>You can add item here</DialogContentText>
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="name"
-              name="name"
-              label="Item Name"
-              type="name"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="code"
-              name="code"
-              label="Item Code"
-              type="code"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="population"
-              name="population"
-              label="Item Population"
-              type="population"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="size"
-              name="size"
-              label="Item Size"
-              type="name"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="density"
-              name="density"
-              label="Item Density"
-              type="density"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="density1"
-              name="density1"
-              label="Item Density2"
-              type="density"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="density2"
-              name="density2"
-              label="Item Density2"
-              type="density"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="density3"
-              name="density3"
-              label="Item Density3"
-              type="density"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="density4"
-              name="density4"
-              label="Item Density4"
-              type="density"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={handleChange}
-              autoFocus
-              margin="dense"
-              id="density5"
-              name="density5"
-              label="Item Density5"
-              type="density"
-              fullWidth
-              variant="standard"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleSave}>Add Item</Button>
-          </DialogActions>
-        </Dialog>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -369,6 +239,7 @@ export default function StickyHeadTable() {
                         stickyHeader
                         align={column.align}
                         style={{
+                          minWidth: column.minWidth,
                           position: column.sticky ? "sticky" : "initial",
                           left: column.sticky ? 0 : "auto",
                           backgroundColor: "#f5f5f5",
@@ -424,9 +295,11 @@ export default function StickyHeadTable() {
                               key={column.id}
                               align={column.align}
                               style={{
+                                minWidth: column.minWidth,
                                 position: column.sticky ? "sticky" : "initial",
                                 left: column.sticky ? 0 : "auto",
                                 backgroundColor: "#f5f5f5",
+                                whiteSpace: "nowrap",
                               }}
                             >
                               {column.format &&
@@ -445,19 +318,55 @@ export default function StickyHeadTable() {
                                 left: column.sticky ? 0 : "auto",
                               }}
                             >
-                              {column.format &&
-                              typeof row[column.id] === "number"
-                                ? column.format(row[column.id])
-                                : row[column.id]}
+                              <Tooltip
+                                title={
+                                  column.format &&
+                                  typeof row[column.id] === "number"
+                                    ? column.format(row[column.id])
+                                    : row[column.id]
+                                }
+                              >
+                                <Typography
+                                  sx={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    width: "130px",
+                                  }}
+                                >
+                                  {column.format &&
+                                  typeof row[column.id] === "number"
+                                    ? column.format(row[column.id])
+                                    : row[column.id]}
+                                </Typography>
+                              </Tooltip>
                             </TableCell>
                           );
                         } else {
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              {column.format &&
-                              typeof row[column.id] === "number"
-                                ? column.format(row[column.id])
-                                : row[column.id]}
+                              <Tooltip
+                                title={
+                                  column.format &&
+                                  typeof row[column.id] === "number"
+                                    ? column.format(row[column.id])
+                                    : row[column.id]
+                                }
+                              >
+                                <Typography
+                                  sx={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    width: "130px",
+                                  }}
+                                >
+                                  {column.format &&
+                                  typeof row[column.id] === "number"
+                                    ? column.format(row[column.id])
+                                    : row[column.id]}
+                                </Typography>
+                              </Tooltip>
                             </TableCell>
                           );
                         }
